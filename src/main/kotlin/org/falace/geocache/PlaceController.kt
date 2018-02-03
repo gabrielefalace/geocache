@@ -22,8 +22,8 @@ class PlaceController {
   }
 
   @PostMapping("place/{key}")
-  fun post(@PathVariable key: String) {
-    placeService.put(key, Place("place::$key"))
+  fun post(@PathVariable key: String): Long {
+    return placeService.put(key, Place("place::$key"))
   }
 
 
