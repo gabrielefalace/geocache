@@ -1,6 +1,7 @@
 package org.falace.geocache
 
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.geo.Circle
 import org.springframework.data.geo.Point
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Service
@@ -13,18 +14,20 @@ class PlaceService {
   private lateinit var template: RedisTemplate<Any?, Any?>
 
   fun get(key: String): Mono<Place> {
-    val place = template.opsForHash<String, Place>().get("Place", key)
-    return Mono.just(place?: Place("nowhere"))
+    val place = template.opsForValue().get(key) as Place
+    return Mono.just(place)
   }
 
   // x,y are lng,lat
   fun put(key: String, place: Place): Long {
-    template.opsForHash<String, Place>().put("Place", key, place)
+    template.opsForValue().set(key, place)
 
-    // just a random place to try... 
+    // just a random place to try...
     val memberMap: Map<Any?, Point> = mutableMapOf(place to Point(52.459861, 13.370086))
-    return template.opsForGeo().add(key, memberMap)
+    return template.opsForGeo().add("Place", memberMap)
   }
+
+  fun geoGet() = template.opsForGeo().radius("Place", Circle(Point(52.459861, 13.370086), 50.0))
 
 
 }

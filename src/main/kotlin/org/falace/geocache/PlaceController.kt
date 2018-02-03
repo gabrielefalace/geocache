@@ -26,5 +26,9 @@ class PlaceController {
     return placeService.put(key, Place("place::$key"))
   }
 
+  @GetMapping("geo")
+  fun geoGet(): Any {
+    return placeService.geoGet()
+  }
 
 }
