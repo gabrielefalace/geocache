@@ -11,9 +11,9 @@ class PlaceService {
   @Autowired
   private lateinit var template: RedisTemplate<Any?, Any?>
 
-  fun get(key: String): Mono<String> {
+  fun get(key: String): Mono<Place> {
     val place = template.opsForHash<String, Place>().get("Place", key)
-    return Mono.just(place?.toString() ?: "damn")
+    return Mono.just(place?: Place("nowhere"))
   }
 
   fun put(key: String, value: Place) {

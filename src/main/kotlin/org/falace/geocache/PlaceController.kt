@@ -1,7 +1,6 @@
 package org.falace.geocache
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
 
 
-@RestController("/")
+@RestController
 class PlaceController {
 
 
@@ -17,12 +16,12 @@ class PlaceController {
   lateinit var placeService: PlaceService
 
 
-  @GetMapping("get/{key}")
-  fun get(@PathVariable key: String): Mono<String> {
+  @GetMapping("place/{key}")
+  fun get(@PathVariable key: String): Mono<Place> {
     return placeService.get(key)
   }
 
-  @PostMapping("post/{key}")
+  @PostMapping("place/{key}")
   fun post(@PathVariable key: String) {
     placeService.put(key, Place("place::$key"))
   }
